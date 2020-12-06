@@ -1,23 +1,45 @@
-file1 = open('data.txt', 'r') 
-lines = file1.readlines() 
- 
+#!/usr/bin/python3
+# Load file
+datafile = open('data.txt', 'r')
+lines = datafile.readlines()
+
+# Parse data and prepare storage variables
 values = []
 
-# Strips the newline character 
-for line in lines: 
+for line in lines:
     values.append(int(line))
-    
+
 values.sort()
 
-valuesReversed = values.copy()
-valuesReversed.reverse()
-
-for val in values:
-    for valB in values:
+# Build solution
+#   Part 1
+def part1(values):
+    valuesReversed = values.copy()
+    valuesReversed.reverse()
+    for val in values:
         for valR in valuesReversed:
-            sum = val + valB + valR
-            if sum == 2020:
-                print("got 2020 with " + str(val) + ", " + str(valB) + " and " + str(valR))
-                print("their product is " + str(val*valR*valB))
-            if sum < 2020:
+            sum1 = val + valR
+            if sum1 == 2020:
+                print("  Found solution: {} and {}, product is {}".format(str(val), str(valR), str(val*valR)))
+                return
+            if sum1 < 2020:
                 break
+
+def part2(values):
+    valuesReversed = values.copy()
+    valuesReversed.reverse()
+    for val in values:
+        for valB in values:
+            for valR in valuesReversed:
+                sum2 = val + valB + valR
+                if sum2 == 2020:
+                    print("  Found solution: {}, {}, and {}, product is {}".format(str(val), str(valB), str(valR), str(val*valB*valR)))
+                    return
+                if sum2 < 2020:
+                    break
+
+# Call req functions
+print("Calculating solution for part 1:")
+part1(values)
+print("Calculating solution for part 2:")
+part2(values)
