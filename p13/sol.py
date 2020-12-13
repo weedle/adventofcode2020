@@ -5,27 +5,17 @@ import math
 # Load file
 datafile = open('data.txt', 'r')
 lines = datafile.readlines()
-busesRaw = lines[1].strip().split(',')
-
-def readData(lines):
-    waitTime = int(lines[0].strip())
-    busesStr = lines[1].strip().split(',')
-    buses = []
-    for s in busesStr:
-        if s != 'x':
-            buses.append(int(s))
-    return waitTime, buses
+waitTime = int(lines[0].strip())
+buses = lines[1].strip().split(',')
 
 def getEarliestBus(waitTime, buses):
-    found = False
-    while found != True:
+    buses = [int(x) for x in buses if x != 'x']
+    while True:
         for bus in buses:
             if waitTime % bus == 0:
                 print("Found bus {} at time {}".format(bus, waitTime))
                 return waitTime, bus
         waitTime += 1
-
-waitTime, buses = readData(lines)
 
 print("Wait: " + str(waitTime))
 print("Buses: {}".format(buses))
@@ -39,16 +29,14 @@ def part2(buses):
     time = int(buses[0])
     inc = int(buses[0])
     while i < len(buses):
-        if buses[i] == 'x':
-            print("Nothing to do for index: " + str(i))
+        while buses[i] == 'x':
+            i += 1
+        if (time + i) % int(buses[i]) == 0:
+            print("  got time {} up to {}".format(time, i))
+            inc *= int(buses[i])
             i += 1
         else:
-            if (time + i) % int(buses[i]) == 0:
-                print("got time {} up to {}".format(time, i))
-                inc *= int(buses[i])
-                i += 1
-            else:
-                time += inc
-    print("Part 2: " + str(time))
+            time += inc
+    return time
 
-part2(busesRaw)
+print("Part 2: " + str(part2(buses)))
